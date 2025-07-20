@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestor de Tareas Pro | TaskFlow Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Inter y Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="alerta" class="hidden"></div>
+  <header class="branding">
+    <div class="logo">
+      <!-- Logo SVG con sombra y gradiente -->
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <defs>
+          <linearGradient id="grad1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4F8CFF"/>
+            <stop offset="1" stop-color="#6EE7B7"/>
+          </linearGradient>
+        </defs>
+        <circle cx="24" cy="24" r="22" fill="url(#grad1)" stroke="#fff" stroke-width="3"/>
+        <path d="M16 26l6 6 14-14" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-name">TaskFlow Pro</span>
+    </div>
+    <p class="slogan">Tu productividad, tu estilo</p>
+  </header>
+
+  <main>
+    <section class="task-manager">
+      <h1>Gestor de Tareas Pro</h1>
+      <p class="subtitle">Organiza tu día, impulsa tu negocio.</p>
+      <form id="task-form" autocomplete="off">
+        <input 
+          type="text" 
+          id="task-input" 
+          placeholder="Escribe una nueva tarea..." 
+          maxlength="80"
+          required
+        >
+        <input 
+          type="time"
+          id="task-time"
+          class="time-input"
+          aria-label="Hora de la tarea (opcional)"
+        >
+        <select id="task-category" class="category-input" aria-label="Categoría">
+          <option value="Trabajo" selected>Trabajo</option>
+          <option value="Estudio">Estudio</option>
+          <option value="Personal">Personal</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <button type="submit" id="add-btn" aria-label="Agregar tarea">
+          <span>+</span> Agregar
+        </button>
+      </form>
+      <div class="export-buttons">
+        <button id="export-json" type="button">📤 Exportar JSON</button>
+        <button id="export-pdf" type="button">🖨️ Exportar PDF</button>
+        <button id="modo-oscuro-btn" type="button">🌙 Modo Oscuro</button>
+        <button id="toggle-sound-btn" type="button">🔔 Sonido ON</button>
+      </div>
+      <ul id="task-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="socials">
+      <a href="#" title="Instagram" aria-label="Instagram">
+        <span class="icon ig"></span>
+      </a>
+      <a href="https://web.facebook.com/ar.rojas.221795" title="Facebook" aria-label="Facebook">
+        <span class="icon tw"></span>
+      </a>
+      <a href="https://www.linkedin.com/in/joel-josias-rojas-alca-260145268/" title="LinkedIn" aria-label="LinkedIn">
+        <span class="icon li"></span>
+      </a>
+    </div>
+    <p>&copy; 2025 TaskFlow Pro. Todos los derechos reservados.</p>
+  </footer>
+
+  <audio id="alarm-audio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7c7.mp3" preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
