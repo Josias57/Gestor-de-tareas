@@ -38,7 +38,8 @@
           id="task-input" 
           placeholder="Escribe una nueva tarea..." 
           maxlength="80"
-          required>
+          required
+        >
         <input 
           type="time"
           id="task-time"
@@ -61,6 +62,16 @@
         <button id="modo-oscuro-btn" type="button">🌙 Modo Oscuro</button>
         <button id="toggle-sound-btn" type="button">🔔 Sonido ON</button>
       </div>
+      <div class="audio-upload">
+        <label for="alarm-tone" class="audio-label">🔔 Elegir tono de alarma:</label>
+        <select id="alarm-tone">
+          <option value="audios/alarma1.mp3">Tono 1</option>
+          <option value="audios/alarma2.mp3">Tono 2</option>
+          <option value="audios/alarma3.mp3">Tono 3</option>
+          <option value="custom">Personalizado...</option>
+        </select>
+        <input type="file" id="custom-audio" accept="audio/*" style="display:none;">
+      </div>
       <ul id="task-list"></ul>
     </section>
   </main>
@@ -79,7 +90,8 @@
     </div>
     <p>&copy; 2025 TaskFlow Pro. Todos los derechos reservados.</p>
   </footer>
-  <audio id="alarm-audio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7c7.mp3" preload="auto"></audio>
+
+  <audio id="alarm-audio" src="audios/alarm-26718.mp3" preload="auto"></audio>
   <script src="script.js"></script>
 </body>
 </html>
