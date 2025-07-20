@@ -137,8 +137,20 @@ function mostrarAlerta(texto) {
 
 // Sonido de alarma
 const alarmAudio = document.getElementById('alarm-audio');
-const btnToggleSound = document.getElementById('toggle-sound-btn');
+const alarmTone = document.getElementById('alarm-tone');
+const customAudioInput = document.getElementById('custom-audio');
 let sonidoActivo = localStorage.getItem('sonidoActivo') !== 'false'; // Por defecto ON
+
+alarmTone.addEventListener('change', function() {
+  if (this.value === 'custom') {
+    customAudioInput.style.display = 'inline-block';
+    customAudioInput.click();
+  } else {
+    alarmAudio.src = this.value;
+    localStorage.setItem('alarmTone', this.value);
+    customAudioInput.style.display = 'none';
+  }
+});
 
 function playAlarmSound() {
   if (sonidoActivo && alarmAudio) {
