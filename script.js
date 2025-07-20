@@ -128,69 +128,25 @@ function startAlarmChecker() {
   setInterval(checkAlarms, 60000); // Cada minuto
 }
 
-function mostrarAlerta(texto) {
-  const alerta = document.getElementById("alerta");
-  alerta.textContent = texto;
-  alerta.classList.remove("hidden");
-  setTimeout(() => alerta.classList.add("hidden"), 4000);
-}
-
-// Sonido de alarma
-const alarmAudio = document.getElementById('alarm-audio');
-const alarmTone = document.getElementById('alarm-tone');
-const customAudioInput = document.getElementById('custom-audio');
-let sonidoActivo = localStorage.getItem('sonidoActivo') !== 'false'; // Por defecto ON
-
-alarmTone.addEventListener('change', function() {
-  if (this.value === 'custom') {
-    customAudioInput.style.display = 'inline-block';
-    customAudioInput.click();
+// ========== BOTÓN MODO OSCURO ==========
+const btnModoOscuro = document.getElementById('modo-oscuro-btn');
+function actualizarModoOscuro() {
+  if (localStorage.getItem('modoOscuro') === 'true') {
+    document.body.classList.add('dark-mode');
+    btnModoOscuro.textContent = '☀️ Modo Claro';
   } else {
-    alarmAudio.src = this.value;
-    localStorage.setItem('alarmTone', this.value);
-    customAudioInput.style.display = 'none';
-  }
-});
-
-function playAlarmSound() {
-  if (sonidoActivo && alarmAudio) {
-    alarmAudio.currentTime = 0;
-    alarmAudio.play();
+    document.body.classList.remove('dark-mode');
+    btnModoOscuro.textContent = '🌙 Modo Oscuro';
   }
 }
-
-// Toggle sonido
-function actualizarBotonSonido() {
-  btnToggleSound.textContent = sonidoActivo ? '🔔 Sonido ON' : '🔕 Sonido OFF';
-}
-btnToggleSound.addEventListener('click', () => {
-  sonidoActivo = !sonidoActivo;
-  localStorage.setItem('sonidoActivo', sonidoActivo);
-  actualizarBotonSonido();
+btnModoOscuro.addEventListener('click', () => {
+  const isDark = !document.body.classList.contains('dark-mode');
+  localStorage.setItem('modoOscuro', isDark);
+  actualizarModoOscuro();
 });
-actualizarBotonSonido();
+actualizarModoOscuro();
 
-// Modifica checkAlarms para incluir sonido
-function checkAlarms() {
-  const now = new Date();
-  const nowStr = now.toTimeString().slice(0,5); // "HH:MM"
-  tasks.forEach((task, idx) => {
-    if (
-      task.time &&
-      !task.completed &&
-      !task.notificada &&
-      task.time === nowStr
-    ) {
-      alert(`¡Es hora de: "${task.text}"!`);
-      mostrarAlerta(`⏰ ¡Es hora de: "${task.text}"!`);
-      playAlarmSound();
-      tasks[idx].notificada = true;
-      saveTasks();
-    }
-  });
-}
-
-// Exportar tareas como JSON
+// ========== EXPORTAR JSON ==========
 document.getElementById('export-json').addEventListener('click', () => {
   const dataStr = JSON.stringify(tasks, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
@@ -204,26 +160,125 @@ document.getElementById('export-json').addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-// Exportar tareas como PDF (imprimir solo la lista)
+// ========== EXPORTAR PDF ==========
 document.getElementById('export-pdf').addEventListener('click', () => {
-  // Oculta todo menos la lista de tareas
   document.body.classList.add('print-tasks');
-  window.print();
-  setTimeout(() => document.body.classList.remove('print-tasks'), 1000);
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => document.body.classList.remove('print-tasks'), 500);
+  }, 100);
 });
 
-// Toggle modo oscuro
-const btnModoOscuro = document.getElementById('modo-oscuro-btn');
-btnModoOscuro.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  // Guardar preferencia en localStorage
-  localStorage.setItem('modoOscuro', document.body.classList.contains('dark-mode'));
-  // Cambiar texto/icono del botón
-  btnModoOscuro.textContent = document.body.classList.contains('dark-mode') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
-});
-
-// Al cargar, aplicar preferencia guardada
-if (localStorage.getItem('modoOscuro') === 'true') {
-  document.body.classList.add('dark-mode');
-  btnModoOscuro.textContent = '☀️ Modo Claro';
+// ========== ALARMA: SONIDO Y VISUAL ==========
+function mostrarAlerta(texto) {
+  const alerta = document.getElementById("alerta");
+  alerta.textContent = texto;
+  alerta.classList.remove("hidden");
+  setTimeout(() => alerta.classList.add("hidden"), 4000);
 }
+
+// Sonido de alarma
+const alarmAudio = document.getElementById('alarm-audio');
+const alarmTone = document.getElementById('alarm-tone');
+const customAudioInput = document.getElementById('custom-audio');
+let sonidoActivo = localStorage.getItem('sonidoActivo') !== 'false'; // Por defecto ON
+
+// Mantener tono seleccionado y personalizado
+const savedTone = localStorage.getItem('alarmTone');
+const savedCustom = localStorage.getItem('customAlarmAudio');
+if (savedTone) {
+  alarmTone.value = savedTone;
+  if (savedTone === 'custom' && savedCustom) {
+    alarmAudio.src = savedCustom;
+  } else {
+    alarmAudio.src = savedTone;
+  }
+}
+
+alarmTone.addEventListener('change', function() {
+  if (this.value === 'custom') {
+    customAudioInput.style.display = 'inline-block';
+    customAudioInput.click();
+  } else {
+    alarmAudio.src = this.value;
+    localStorage.setItem('alarmTone', this.value);
+    customAudioInput.style.display = 'none';
+  }
+});
+
+customAudioInput.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file && file.type.startsWith('audio/')) {
+    const url = URL.createObjectURL(file);
+    alarmAudio.src = url;
+    localStorage.setItem('alarmTone', 'custom');
+    localStorage.setItem('customAlarmAudio', url);
+    alarmTone.value = 'custom';
+    mostrarAlerta('🔊 ¡Audio de alarma personalizado cargado!');
+  } else {
+    mostrarAlerta('El archivo seleccionado no es un audio válido.');
+    alarmTone.value = 'audios/alarma1.mp3';
+    alarmAudio.src = 'audios/alarma1.mp3';
+  }
+});
+
+// ========== CHECK ALARMS SIN BLOQUEAR ==========
+function checkAlarms() {
+  const now = new Date();
+  const nowStr = now.toTimeString().slice(0,5); // "HH:MM"
+  tasks.forEach((task, idx) => {
+    if (
+      task.time &&
+      !task.completed &&
+      !task.notificada &&
+      task.time === nowStr
+    ) {
+      mostrarAlerta(`⏰ ¡Es hora de: "${task.text}"!`);
+if (sonidoActivo) {
+  alarmAudio.currentTime = 0;
+  alarmAudio.play();
+}
+      tasks[idx].notificada = true;
+      saveTasks();
+    }
+  });
+}
+
+// ========== BOTÓN ACTIVAR/DESACTIVAR SONIDO ==========
+const btnToggleSound = document.getElementById('toggle-sound-btn');
+
+function actualizarBotonSonido() {
+  btnToggleSound.textContent = sonidoActivo ? '🔔 Sonido ON' : '🔕 Sonido OFF';
+}
+
+btnToggleSound.addEventListener('click', () => {
+  sonidoActivo = !sonidoActivo;
+  localStorage.setItem('sonidoActivo', sonidoActivo);
+  actualizarBotonSonido();
+});
+
+actualizarBotonSonido();
+
+// Selector de temas desplegable
+const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+const themeSelector = document.querySelector('.theme-selector');
+themeToggleBtn.addEventListener('click', () => {
+  themeSelector.classList.toggle('active');
+});
+
+// Cambiar tema divertido
+const themeBtns = document.querySelectorAll('.theme-btn');
+function setTheme(theme) {
+  document.body.className = document.body.className
+    .replace(/\btheme-\w+\b/g, '') // elimina cualquier tema anterior
+    .trim();
+  if (theme !== 'default') document.body.classList.add('theme-' + theme);
+  localStorage.setItem('theme', theme);
+  themeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
+}
+themeBtns.forEach(btn => {
+  btn.addEventListener('click', () => setTheme(btn.dataset.theme));
+});
+// Al cargar, aplicar tema guardado
+const savedTheme = localStorage.getItem('theme') || 'default';
+setTheme(savedTheme);
