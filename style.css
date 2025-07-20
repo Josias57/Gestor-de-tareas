@@ -469,22 +469,23 @@ body.dark-mode .delete-btn:hover {
 
 /* === RESPONSIVE === */
 @media (max-width: 600px) {
-  body, html {
+  html, body {
     padding: 0;
     margin: 0;
     width: 100vw;
     min-width: 0;
     background: var(--bg);
+    box-sizing: border-box;
   }
   .branding {
-    padding: 1.2rem 0.5rem 0.7rem 0.5rem;
+    padding: 1.1rem 0.3rem 0.7rem 0.3rem;
   }
   .logo {
-    font-size: 1.3rem;
-    gap: 0.5rem;
+    font-size: 1.1rem;
+    gap: 0.4rem;
   }
   .task-manager {
-    padding: 1.1rem 0.3rem 1rem 0.3rem;
+    padding: 1rem 0.1rem 0.7rem 0.1rem;
     max-width: 100vw;
     min-width: 0;
     box-sizing: border-box;
@@ -492,30 +493,35 @@ body.dark-mode .delete-btn:hover {
     box-shadow: none;
   }
   .task-manager h1 {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
   .subtitle {
-    font-size: 0.97rem;
+    font-size: 0.93rem;
   }
   #task-form {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    width: 100%;
   }
   #task-input, .time-input, .category-input {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
     font-size: 1rem;
+    padding: 0.7rem 0.8rem;
+    margin: 0;
   }
   #add-btn {
     width: 100%;
     justify-content: center;
     font-size: 1rem;
+    margin-top: 0.2rem;
   }
   .export-buttons {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
     width: 100%;
+    margin-bottom: 0.8rem;
   }
   .export-buttons button {
     width: 100%;
@@ -524,24 +530,37 @@ body.dark-mode .delete-btn:hover {
   #task-list {
     padding: 0;
     margin: 0;
+    width: 100%;
   }
   .task-item {
-    padding: 0.7rem 0.7rem;
+    padding: 0.7rem 0.5rem;
     font-size: 1rem;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.6rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px 0 rgba(79,140,255,0.06);
+    word-break: break-word;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
   .task-content {
-    gap: 0.5rem;
+    gap: 0.4rem;
     flex-wrap: wrap;
+    width: 100%;
   }
   .task-time, .category-badge {
     font-size: 0.9em;
-    padding: 0.15em 0.6em;
-    margin-left: 0.4em;
+    padding: 0.13em 0.5em;
+    margin-left: 0.3em;
+  }
+  .delete-btn {
+    align-self: flex-end;
+    margin-left: 0;
+    margin-top: 0.3rem;
   }
   footer {
-    padding: 1rem 0 0.7rem 0;
-    font-size: 0.95rem;
+    padding: 0.7rem 0 0.5rem 0;
+    font-size: 0.93rem;
   }
 }
 
